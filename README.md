@@ -17,15 +17,10 @@ A sleek, responsive Flutter application that delivers the latest news under one 
 
 ---
 
-## 📺 Demo
+##  ScreenShot
+<img width="959" alt="NEWS App" src="https://github.com/user-attachments/assets/cb5bfdb5-ea72-42eb-a104-131a6495a56b" />
 
-<video src="assets/videos/NewApp.mp4" controls width="100%" poster="docs/demo-poster.png">
-  Your browser does not support the video tag.
-</video>
 
-> For a quick GIF preview, see [assets/videos/NewApp.mp4](assets/videos/NewApp.mp4)
-
----
 
 ## 🚀 Getting Started
 
