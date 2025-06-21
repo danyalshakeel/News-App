@@ -23,7 +23,7 @@ A sleek, responsive Flutter application that delivers the latest news under one 
   Your browser does not support the video tag.
 </video>
 
-> For a quick GIF preview, see [assets/videos/NewApp.mp4](docs/demo.gif)
+> For a quick GIF preview, see [assets/videos/NewApp.mp4](assets/videos/NewApp.mp4)
 
 ---
 
