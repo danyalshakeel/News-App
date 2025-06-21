@@ -39,7 +39,7 @@ dependencies:
   provider: ^6.1.2
   infinite_carousel: ^1.1.1
   http: ^1.2.2
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   smooth_page_indicator: ^1.2.0+3
   cached_network_image: ^3.3.1
   webview_flutter: ^4.8.0

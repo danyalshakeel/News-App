@@ -188,7 +188,7 @@ class _MainScreenState extends State<MainScreen> {
                         return BlogTile(
                             desc: articles[index].description!,
                             title: articles[index].title,
-                            imageurl: articles[index].urlToImage!,
+                            imageUrl: articles[index].urlToImage!,
                             url: articles[index].url!);
                       },
                       childCount: articles.length,

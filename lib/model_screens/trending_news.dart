@@ -7,9 +7,9 @@ class BlogTile extends StatelessWidget {
       {super.key,
       required this.desc,
       required this.title,
-      required this.imageurl,
+      required this.imageUrl,
       required this.url});
-  String imageurl, title, desc, url;
+  String imageUrl, title, desc, url;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +30,16 @@ class BlogTile extends StatelessWidget {
               children: [
                 Container(
                   child: ClipRRect(
+
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        imageurl,
+                      child: imageUrl=='assets/images/Placeholder.jpeg'?Image.asset(
+                        imageUrl,
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.cover,
+                      ):
+                      Image.network(
+                        imageUrl,
                         height: 120,
                         width: 120,
                         fit: BoxFit.cover,

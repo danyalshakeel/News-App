@@ -3,145 +3,128 @@ import 'package:flutter/material.dart';
 import 'package:new10/model/api_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// ignore: must_be_immutable
+// Responsive & styled articles list
 class ArticlesScreen extends StatelessWidget {
-  ArticlesScreen({
-    super.key,
-    required this.head,
-  });
-  List<ApiModel> head = [];
+  final List<ApiModel> head;
+  const ArticlesScreen({Key? key, required this.head}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text.rich(TextSpan(children: [
-          const TextSpan(
-            text: "Breaking ",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
+        title: Text.rich(
           TextSpan(
-            text: "News",
-            style: TextStyle(
-                fontSize: 24,
-                color: Colors.redAccent[700],
-                fontWeight: FontWeight.bold),
+            children: [
+              TextSpan(
+                text: "Breaking ",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              TextSpan(
+                text: "News",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.redAccent.shade700,
+                ),
+              ),
+            ],
           ),
-        ])),
-        elevation: 3,
+        ),
+        elevation: 2,
       ),
-      body: Container(
-          child: ListView.builder(
+      body: ListView.separated(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         itemCount: head.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            margin: EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3), // changes position of shadow
-                ),
-              ],
+          final article = head[index];
+          return Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: Material(
-              borderRadius: BorderRadius.circular(15),
-              elevation: 5,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: const Color(0xFFF8F8F8), // Light background color
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () => _launchUrl(article.url),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Image
+                  CachedNetworkImage(
+                    imageUrl: article.urlToImage ?? '',
+                    height: 200,
+                    fit: BoxFit.cover,
+                    placeholder: (_, __) => Container(
+                      height: 200,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (_, __, ___) => Container(
+                      height: 200,
+                      color: Colors.grey.shade200,
+                      child: const Icon(
+                        Icons.broken_image,
+                        size: 48,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
-                  height: MediaQuery.of(context).size.height / 2.1,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height / 4.5,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
+                  // Content
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          article.title,
+                          style: Theme.of(context).textTheme.titleLarge,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: CachedNetworkImage(
-                            imageUrl: head[index].urlToImage!,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
+                        const SizedBox(height: 8),
+                        Text(
+                          article.description ?? '',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton.icon(
+                            onPressed: () => _launchUrl(article.url),
+                            icon: const Icon(Icons.open_in_new),
+                            label: const Text('Read More'),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.redAccent.shade700, textStyle: const TextStyle(fontSize: 16),
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        head[index].title,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        head[index].description!,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black54,
-                        ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Spacer(),
-                      Row(
-                        children: [
-                          const Icon(Icons.open_in_new,
-                              color: Colors.blueAccent),
-                          TextButton(
-                            onPressed: () {
-                              launchUrl(Uri.parse(head[index].url!));
-                            },
-                            child: const Text(
-                              "Read More",
-                              style: TextStyle(
-                                color: Colors.blueAccent,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           );
         },
-      )),
+      ),
     );
+  }
+
+  Future<void> _launchUrl(String? link) async {
+    if (link == null) return;
+    final uri = Uri.parse(link);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }
